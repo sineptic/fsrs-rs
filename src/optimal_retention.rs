@@ -229,15 +229,14 @@ pub fn simulate(
 
         let mut retrievability = Array1::zeros(deck_size); // Create an array for retrievability
 
-        fn power_forgetting_curve(t: f32, s: f32) -> f32 {
-            (t / s).mul_add(FACTOR as f32, 1.0).powf(DECAY as f32)
-        }
-
         // Calculate retrievability for entries where has_learned is true
         izip!(&mut retrievability, &delta_t, &old_stability, &has_learned)
             .filter(|(.., &has_learned_flag)| has_learned_flag)
             .for_each(|(retrievability, &delta_t, &stability, ..)| {
-                *retrievability = power_forgetting_curve(delta_t, stability)
+                fn power_forgetting_curve(t: f32, s: f32) -> f32 {
+                    (t / s).mul_add(FACTOR as f32, 1.0).powf(DECAY as f32)
+                }
+                *retrievability = power_forgetting_curve(delta_t, stability);
             });
 
         // Set 'cost' column to 0
@@ -761,18 +760,20 @@ pub fn extract_simulator_config(
                 .push(row.sum_review_duration);
         }
         // calculate the median of the sum_review_duration
-        fn median(x: &mut [u32]) -> u32 {
-            x.sort_unstable();
-            let n = x.len();
-            if n % 2 == 0 {
-                (x[n / 2 - 1] + x[n / 2]) / 2
-            } else {
-                x[n / 2]
-            }
-        }
         cost_dict
             .into_iter()
-            .map(|(k, mut v)| (k, median(&mut v)))
+            .map(|(k, mut v)| {
+                fn median(x: &mut [u32]) -> u32 {
+                    x.sort_unstable();
+                    let n = x.len();
+                    if n % 2 == 0 {
+                        (x[n / 2 - 1] + x[n / 2]) / 2
+                    } else {
+                        x[n / 2]
+                    }
+                }
+                (k, median(&mut v))
+            })
             .collect::<HashMap<_, _>>()
     };
 

@@ -274,13 +274,13 @@ mod tests {
 
     #[test]
     fn batch_shuffle_dataloader() {
+        type Backend = NdArray<f32>;
         let train_set = anki21_sample_file_converted_to_fsrs();
         let (_pre_train_set, train_set) = prepare_training_data(train_set);
         let dataset = FSRSDataset::from(train_set);
         let batch_size = 512;
         let seed = 42;
         let device = NdArrayDevice::Cpu;
-        type Backend = NdArray<f32>;
         let batcher = FSRSBatcher::<Backend>::new(device);
         let dataloader =
             BatchShuffledDataLoaderBuilder::new(batcher).build(dataset, batch_size, seed);

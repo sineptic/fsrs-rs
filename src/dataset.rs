@@ -249,7 +249,11 @@ mod tests {
 
     #[test]
     fn from_anki() {
-        use burn::data::dataloader::Dataset;
+        use burn::{
+            backend::{ndarray::NdArrayDevice, NdArray},
+            data::dataloader::{DataLoaderBuilder, Dataset},
+        };
+        type Backend = NdArray<f32>;
 
         let dataset = FSRSDataset::from(anki21_sample_file_converted_to_fsrs());
         assert_eq!(
@@ -268,12 +272,8 @@ mod tests {
             }
         );
 
-        use burn::backend::ndarray::NdArrayDevice;
         let device = NdArrayDevice::Cpu;
-        use burn::backend::NdArray;
-        type Backend = NdArray<f32>;
         let batcher = FSRSBatcher::<Backend>::new(device);
-        use burn::data::dataloader::DataLoaderBuilder;
         let dataloader = DataLoaderBuilder::new(batcher)
             .batch_size(1)
             .shuffle(42)

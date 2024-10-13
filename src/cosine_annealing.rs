@@ -24,7 +24,6 @@ impl<B: Backend> LrScheduler<B> for CosineAnnealingLR {
     type Record = usize;
 
     fn step(&mut self) -> LearningRate {
-        self.step_count += 1.0;
         use std::f64::consts::PI;
         fn cosine_annealing_lr(
             init_lr: LearningRate,
@@ -41,6 +40,7 @@ impl<B: Backend> LrScheduler<B> for CosineAnnealingLR {
                     .mul_add(lr - eta_min, eta_min)
             }
         }
+        self.step_count += 1.0;
         self.current_lr = cosine_annealing_lr(
             self.init_lr,
             self.current_lr,
