@@ -94,7 +94,7 @@ fn convert_to_fsrs_items(
     mut entries: Vec<RevlogEntry>,
     next_day_starts_at: i64,
     timezone: Tz,
-) -> Option<Vec<FSRSItem>> {
+) -> Vec<FSRSItem> {
     // entries = filter_out_cram(entries);
     // entries = filter_out_manual(entries);
     entries = remove_revlog_before_last_first_learn(&entries);
@@ -105,25 +105,23 @@ fn convert_to_fsrs_items(
         entries[i].last_interval = (date_current - date_previous).num_days() as i32;
     }
 
-    Some(
-        entries
-            .iter()
-            .enumerate()
-            .skip(1)
-            .map(|(idx, _)| {
-                let reviews = entries
-                    .iter()
-                    .take(idx + 1)
-                    .map(|r| FSRSReview {
-                        rating: r.button_chosen as u32,
-                        delta_t: r.last_interval.max(0) as u32,
-                    })
-                    .collect();
-                FSRSItem { reviews }
-            })
-            .filter(|item| item.current().delta_t > 0)
-            .collect(),
-    )
+    entries
+        .iter()
+        .enumerate()
+        .skip(1)
+        .map(|(idx, _)| {
+            let reviews = entries
+                .iter()
+                .take(idx + 1)
+                .map(|r| FSRSReview {
+                    rating: r.button_chosen as u32,
+                    delta_t: r.last_interval.max(0) as u32,
+                })
+                .collect();
+            FSRSItem { reviews }
+        })
+        .filter(|item| item.current().delta_t > 0)
+        .collect()
 }
 
 /// Convert a series of revlog entries sorted by card id into FSRS items.
@@ -132,9 +130,7 @@ pub(crate) fn anki_to_fsrs(revlogs: Vec<RevlogEntry>) -> Vec<FSRSItem> {
         .into_iter()
         .group_by(|r| r.cid)
         .into_iter()
-        .filter_map(|(_cid, entries)| {
-            convert_to_fsrs_items(entries.collect(), 4, Tz::Asia__Shanghai)
-        })
+        .map(|(_cid, entries)| convert_to_fsrs_items(entries.collect(), 4, Tz::Asia__Shanghai))
         .flatten()
         .collect_vec();
     revlogs.sort_by_cached_key(|r| r.reviews.len());
@@ -258,7 +254,7 @@ fn conversion_works() {
     // convert a subset and check it matches expectations
     let mut fsrs_items = single_card_revlog
         .into_iter()
-        .filter_map(|entries| convert_to_fsrs_items(entries, 4, Tz::Asia__Shanghai))
+        .map(|entries| convert_to_fsrs_items(entries, 4, Tz::Asia__Shanghai))
         .flatten()
         .collect_vec();
     assert_eq!(
@@ -444,7 +440,7 @@ fn delta_t_is_correct() -> Result<()> {
             NEXT_DAY_AT,
             Tz::Asia__Shanghai
         ),
-        Some(vec![FSRSItem {
+        vec![FSRSItem {
             reviews: vec![
                 FSRSReview {
                     rating: 3,
@@ -455,7 +451,7 @@ fn delta_t_is_correct() -> Result<()> {
                     delta_t: 1
                 }
             ]
-        }])
+        }]
     );
 
     assert_eq!(
@@ -469,7 +465,7 @@ fn delta_t_is_correct() -> Result<()> {
             NEXT_DAY_AT,
             Tz::Asia__Shanghai
         ),
-        Some(vec![
+        vec![
             FSRSItem {
                 reviews: vec![
                     FSRSReview {
@@ -518,7 +514,7 @@ fn delta_t_is_correct() -> Result<()> {
                     }
                 ]
             }
-        ])
+        ]
     );
 
     Ok(())
