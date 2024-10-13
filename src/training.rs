@@ -469,7 +469,7 @@ mod tests {
                         record.target(),
                         record.level(),
                         message
-                    ))
+                    ));
                 })
                 .level(LevelFilter::Info)
                 .chain(fern::log_file(log_file).unwrap())

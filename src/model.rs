@@ -279,7 +279,7 @@ mod tests {
     #[test]
     fn w() {
         let model = Model::new(ModelConfig::default());
-        assert_eq!(model.w.val().to_data(), Data::from(DEFAULT_PARAMETERS))
+        assert_eq!(model.w.val().to_data(), Data::from(DEFAULT_PARAMETERS));
     }
 
     #[test]
@@ -295,7 +295,7 @@ mod tests {
                 0.4, 0.6, 2.4, 5.8, 6.81, 0.44675013, 0.86, 0.01, 1.49, 0.14, 0.94, 2.18, 0.05,
                 0.34, 1.26, 0.29, 2.61, 0.0, 0.0,
             ]
-        )
+        );
     }
 
     #[test]
@@ -308,7 +308,7 @@ mod tests {
         assert_eq!(
             retention.to_data(),
             Data::from([1.0, 0.946059, 0.9299294, 0.9221679, 0.90000004, 0.79394597])
-        )
+        );
     }
 
     #[test]
@@ -327,7 +327,7 @@ mod tests {
                 DEFAULT_PARAMETERS[0],
                 DEFAULT_PARAMETERS[1]
             ])
-        )
+        );
     }
 
     #[test]
@@ -346,7 +346,7 @@ mod tests {
                 DEFAULT_PARAMETERS[4],
                 DEFAULT_PARAMETERS[4] - DEFAULT_PARAMETERS[5].exp() + 1.0,
             ])
-        )
+        );
     }
 
     #[test]
@@ -393,7 +393,7 @@ mod tests {
         assert_eq!(
             next_difficulty.to_data(),
             Data::from([7.040172, 5.999995, 4.959819, 3.9196422])
-        )
+        );
     }
 
     #[test]
@@ -431,7 +431,7 @@ mod tests {
         assert_eq!(
             next_stability.to_data(),
             Data::from([2.542685, 4.2064567, 6.958895, 11.512355])
-        )
+        );
     }
 
     #[test]

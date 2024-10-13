@@ -65,7 +65,7 @@ fn create_pretrain_data(fsrs_items: Vec<FSRSItem>) -> HashMap<FirstRating, Vec<A
                 delta_t: *second_delta_t as f64,
                 recall: avg,
                 count: ratings.len() as f64,
-            })
+            });
         }
 
         // Sort by delta_t in ascending order
@@ -357,7 +357,7 @@ mod tests {
         let items = [pretrainset.clone(), trainset].concat();
         let average_recall = calculate_average_recall(&items);
         Data::from(pretrain(pretrainset, average_recall).unwrap().0)
-            .assert_approx_eq(&Data::from([0.908_688, 1.678_973, 4.216_837, 9.615_904]), 6)
+            .assert_approx_eq(&Data::from([0.908_688, 1.678_973, 4.216_837, 9.615_904]), 6);
     }
 
     #[test]
