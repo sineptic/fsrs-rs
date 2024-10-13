@@ -96,18 +96,22 @@ pub struct CombinedProgressState {
 }
 
 impl CombinedProgressState {
+    #[must_use]
     pub fn new_shared() -> Arc<Mutex<Self>> {
         Default::default()
     }
 
+    #[must_use]
     pub fn current(&self) -> usize {
         self.splits.iter().map(|s| s.current()).sum()
     }
 
+    #[must_use]
     pub fn total(&self) -> usize {
         self.splits.iter().map(|s| s.total()).sum()
     }
 
+    #[must_use]
     pub const fn finished(&self) -> bool {
         self.finished
     }
