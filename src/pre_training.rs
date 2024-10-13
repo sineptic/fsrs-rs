@@ -125,7 +125,7 @@ fn search_parameters(
     let epsilon = f64::EPSILON;
 
     for (first_rating, data) in &mut pretrainset {
-        let r_s0_default: HashMap<u32, f32> = R_S0_DEFAULT_ARRAY.iter().cloned().collect();
+        let r_s0_default: HashMap<u32, f32> = R_S0_DEFAULT_ARRAY.iter().copied().collect();
         let default_s0 = r_s0_default[first_rating] as f64;
         let delta_t = Array1::from_iter(data.iter().map(|d| d.delta_t));
         let count = Array1::from_iter(data.iter().map(|d| d.count));
@@ -191,14 +191,14 @@ pub(crate) fn smooth_and_fill(
 
     let r_s0_default = R_S0_DEFAULT_ARRAY
         .iter()
-        .cloned()
+        .copied()
         .collect::<HashMap<_, _>>();
     let mut rating_stability_arr = [
         None,
-        rating_stability.get(&1).cloned(),
-        rating_stability.get(&2).cloned(),
-        rating_stability.get(&3).cloned(),
-        rating_stability.get(&4).cloned(),
+        rating_stability.get(&1).copied(),
+        rating_stability.get(&2).copied(),
+        rating_stability.get(&3).copied(),
+        rating_stability.get(&4).copied(),
     ];
     match rating_stability.len() {
         0 => return Err(FSRSError::NotEnoughData),
