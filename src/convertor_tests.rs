@@ -427,7 +427,7 @@ fn revlog(review_kind: RevlogReviewKind, days_ago: i64) -> RevlogEntry {
 }
 
 #[test]
-fn delta_t_is_correct() -> Result<()> {
+fn delta_t_is_correct() {
     assert_eq!(
         convert_to_fsrs_items(
             vec![
@@ -513,8 +513,6 @@ fn delta_t_is_correct() -> Result<()> {
             }
         ]
     );
-
-    Ok(())
 }
 #[test]
 fn test_filter_out_cram() {

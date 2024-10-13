@@ -1080,18 +1080,17 @@ mod tests {
     }
 
     #[test]
-    fn simulate_with_zero_card() -> Result<()> {
+    fn simulate_with_zero_card() {
         let config = SimulatorConfig {
             deck_size: 0,
             ..Default::default()
         };
         let results = simulate(&config, &DEFAULT_PARAMETERS, 0.9, None, None);
         assert_eq!(results.unwrap_err(), FSRSError::InvalidDeckSize);
-        Ok(())
     }
 
     #[test]
-    fn simulate_with_existing_cards_with_wrong_deck_size() -> Result<()> {
+    fn simulate_with_existing_cards_with_wrong_deck_size() {
         let config = SimulatorConfig {
             deck_size: 1,
             ..Default::default()
@@ -1112,7 +1111,6 @@ mod tests {
         ];
         let results = simulate(&config, &DEFAULT_PARAMETERS, 0.9, None, Some(cards));
         assert_eq!(results.unwrap_err(), FSRSError::InvalidDeckSize);
-        Ok(())
     }
 
     #[test]
