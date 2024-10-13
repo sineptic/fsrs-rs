@@ -62,7 +62,7 @@ fn filter_out_manual(entries: Vec<RevlogEntry>) -> Vec<RevlogEntry> {
         .collect()
 }
 
-fn remove_revlog_before_last_first_learn(entries: Vec<RevlogEntry>) -> Vec<RevlogEntry> {
+fn remove_revlog_before_last_first_learn(entries: &[RevlogEntry]) -> Vec<RevlogEntry> {
     let mut last_first_learn_index = 0;
     for (index, entry) in entries.iter().enumerate().rev() {
         if entry.review_kind == Learning {
@@ -97,7 +97,7 @@ fn convert_to_fsrs_items(
 ) -> Option<Vec<FSRSItem>> {
     // entries = filter_out_cram(entries);
     // entries = filter_out_manual(entries);
-    entries = remove_revlog_before_last_first_learn(entries);
+    entries = remove_revlog_before_last_first_learn(&entries);
 
     for i in 1..entries.len() {
         let date_current = convert_to_date(entries[i].id, next_day_starts_at, timezone);
@@ -760,7 +760,7 @@ fn test_remove_revlog_before_last_first_learn() {
             review_kind: Learning,
         },
     ];
-    let revlog_vec = remove_revlog_before_last_first_learn(revlog_vec);
+    let revlog_vec = remove_revlog_before_last_first_learn(&revlog_vec);
     // dbg!(&revlog_vec);
     assert_eq!(
         revlog_vec,
@@ -848,7 +848,7 @@ fn test_remove_revlog_before_last_first_learn() {
         },
     ];
 
-    let revlog_vec = remove_revlog_before_last_first_learn(revlog_vec);
+    let revlog_vec = remove_revlog_before_last_first_learn(&revlog_vec);
     assert_eq!(
         revlog_vec,
         vec![
