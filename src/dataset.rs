@@ -213,7 +213,7 @@ pub fn filter_outlier(
                 // keep the sub_group if it includes at least six items
                 // and the delta_t is less than 100 days if rating is not 4
                 // or less than 365 days if rating is 4
-                if sub_group.len() >= 6 && *delta_t <= if rating != 4 { 100 } else { 365 } {
+                if sub_group.len() >= 6 && *delta_t <= if rating == 4 { 365 } else { 100 } {
                     filtered_items.extend_from_slice(sub_group);
                 } else {
                     removed_pairs[rating as usize].insert(*delta_t);

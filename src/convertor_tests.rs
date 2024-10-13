@@ -182,7 +182,9 @@ pub(crate) fn read_collection() -> Result<Vec<RevlogEntry>> {
     let db = Connection::open("tests/data/collection.anki21")?;
     let filter_out_suspended_cards = false;
     let filter_out_flags = [];
-    let flags_str = if !filter_out_flags.is_empty() {
+    let flags_str = if filter_out_flags.is_empty() {
+        "".to_string()
+    } else {
         format!(
             "AND flags NOT IN ({})",
             filter_out_flags
@@ -191,8 +193,6 @@ pub(crate) fn read_collection() -> Result<Vec<RevlogEntry>> {
                 .collect::<Vec<_>>()
                 .join(", ")
         )
-    } else {
-        "".to_string()
     };
 
     let suspended_cards_str = if filter_out_suspended_cards {
