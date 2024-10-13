@@ -183,7 +183,7 @@ pub fn filter_outlier(
     let mut groups = HashMap::<u32, HashMap<u32, Vec<FSRSItem>>>::new();
 
     // group by rating of first review and delta_t of second review
-    for item in pretrainset.into_iter() {
+    for item in pretrainset {
         let (first_review, second_review) = (item.reviews.first().unwrap(), item.current());
         let rating_group = groups.entry(first_review.rating).or_default();
         let delta_t_group = rating_group.entry(second_review.delta_t).or_default();

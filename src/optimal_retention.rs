@@ -722,7 +722,7 @@ pub fn extract_simulator_config(
     }
     let df1 = {
         let mut grouped_data = HashMap::new();
-        for &row in df.iter() {
+        for &row in &df {
             if row.taken_millis > 0 && row.taken_millis < 1200000 {
                 let real_days = (row.id / 1000 - day_cutoff) / 86400;
                 let key = (row.cid, real_days);
@@ -754,7 +754,7 @@ pub fn extract_simulator_config(
 
     let cost_dict = {
         let mut cost_dict = HashMap::new();
-        for row in df1.iter() {
+        for row in &df1 {
             cost_dict
                 .entry((row.first_review_state, row.first_review_rating))
                 .or_insert_with(Vec::new)
@@ -796,7 +796,7 @@ pub fn extract_simulator_config(
     ) */
     let button_usage_dict = {
         let mut button_usage_dict = HashMap::new();
-        for row in df1.iter() {
+        for row in &df1 {
             button_usage_dict
                 .entry((row.first_review_state, row.first_review_rating))
                 .or_insert_with(Vec::new)
@@ -885,7 +885,7 @@ pub fn extract_simulator_config(
     // rating_offset_dict = sum([df2[g] * (g - 3) for g in range(1, 5)]).to_dict()
     let rating_offset_dict = {
         let mut rating_offset_dict = HashMap::new();
-        for (k, averages) in df2.iter() {
+        for (k, averages) in &df2 {
             let offset = averages
                 .iter()
                 .enumerate()
@@ -898,7 +898,7 @@ pub fn extract_simulator_config(
     // session_len_dict = sum([df2[g] for g in range(1, 5)]).to_dict()
     let session_len_dict = {
         let mut session_len_dict = HashMap::new();
-        for (k, averages) in df2.iter() {
+        for (k, averages) in &df2 {
             let sum = averages.iter().sum::<f32>();
             session_len_dict.insert(k, (sum).to_2_decimal());
         }

@@ -130,8 +130,7 @@ pub(crate) fn anki_to_fsrs(revlogs: Vec<RevlogEntry>) -> Vec<FSRSItem> {
         .into_iter()
         .group_by(|r| r.cid)
         .into_iter()
-        .map(|(_cid, entries)| convert_to_fsrs_items(entries.collect(), 4, Tz::Asia__Shanghai))
-        .flatten()
+        .flat_map(|(_cid, entries)| convert_to_fsrs_items(entries.collect(), 4, Tz::Asia__Shanghai))
         .collect_vec();
     revlogs.sort_by_cached_key(|r| r.reviews.len());
     revlogs
@@ -159,8 +158,7 @@ pub(crate) fn data_from_csv() -> Vec<FSRSItem> {
             button_chosen: r.review_rating as u8,
             taken_millis: r.review_duration,
             review_kind: match r.review_state {
-                0 => RevlogReviewKind::Learning,
-                1 => RevlogReviewKind::Learning,
+                0 | 1 => RevlogReviewKind::Learning,
                 2 => RevlogReviewKind::Review,
                 3 => RevlogReviewKind::Relearning,
                 4 => RevlogReviewKind::Filtered,
@@ -238,7 +236,7 @@ fn conversion_works() {
     let single_card_revlog = vec![revlogs
         .iter()
         .filter(|r| r.cid == 1528947214762)
-        .cloned()
+        .copied()
         .collect_vec()];
     assert_eq!(revlogs.len(), 24394);
     let fsrs_items = anki_to_fsrs(revlogs);
@@ -254,8 +252,7 @@ fn conversion_works() {
     // convert a subset and check it matches expectations
     let mut fsrs_items = single_card_revlog
         .into_iter()
-        .map(|entries| convert_to_fsrs_items(entries, 4, Tz::Asia__Shanghai))
-        .flatten()
+        .flat_map(|entries| convert_to_fsrs_items(entries, 4, Tz::Asia__Shanghai))
         .collect_vec();
     assert_eq!(
         fsrs_items,
