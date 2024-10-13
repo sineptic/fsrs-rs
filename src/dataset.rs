@@ -9,11 +9,11 @@ use burn::{
 use itertools::Itertools;
 use serde::{Deserialize, Serialize};
 
-/// Stores a list of reviews for a card, in chronological order. Each FSRSItem corresponds
+/// Stores a list of reviews for a card, in chronological order. Each `FSRSItem` corresponds
 /// to a single review, but contains the previous reviews of the card as well, after the
 /// first one.
-/// When used during review, the last item should include the correct delta_t, but
-/// the provided rating is ignored as all four ratings are returned by .next_states()
+/// When used during review, the last item should include the correct `delta_t`, but
+/// the provided rating is ignored as all four ratings are returned by .`next_states()`
 #[derive(Debug, Clone, Deserialize, Serialize, PartialEq, Eq)]
 pub struct FSRSItem {
     pub reviews: Vec<FSRSReview>,

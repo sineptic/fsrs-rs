@@ -151,7 +151,7 @@ impl<B: Backend> Model<B> {
         }
     }
 
-    /// If [starting_state] is provided, it will be used instead of the default initial stability/
+    /// If [`starting_state`] is provided, it will be used instead of the default initial stability/
     /// difficulty.
     pub(crate) fn forward(
         &self,
@@ -202,12 +202,18 @@ pub struct FSRS<B: Backend = NdArray> {
 impl FSRS<NdArray> {
     /// - Parameters must be provided before running commands that need them.
     /// - Parameters may be an empty slice to use the default values instead.
+    /// # Errors
+    /// - If `parameters` len isn't 0, 17 or 19.
+    /// - If one parameter is invalid float number.
     pub fn new(parameters: Option<&Parameters>) -> Result<Self> {
         Self::new_with_backend(parameters, NdArrayDevice::Cpu)
     }
 }
 
 impl<B: Backend> FSRS<B> {
+    /// # Errors
+    /// - If `parameters` len isn't 0, 17 or 19.
+    /// - If one parameter is invalid float number.
     pub fn new_with_backend<B2: Backend>(
         parameters: Option<&Parameters>,
         device: B2::Device,

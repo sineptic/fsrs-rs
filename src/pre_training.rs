@@ -76,7 +76,7 @@ fn create_pretrain_data(fsrs_items: Vec<FSRSItem>) -> HashMap<FirstRating, Vec<A
     results
 }
 
-/// The average pass rate & count for a single delta_t for a given first rating.
+/// The average pass rate & count for a single `delta_t` for a given first rating.
 struct AverageRecall {
     delta_t: f64,
     recall: f64,
